@@ -1,0 +1,32 @@
+{
+  "name": "munzo",
+  "version": "1.0.0",
+  "description": "Transaction manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnsherlock/munzo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johnsherlock/munzo/issues"
+  },
+  "homepage": "https://github.com/johnsherlock/munzo#readme",
+  "dependencies": {
+    "chromedriver": "^85.0.1",
+    "fetch": "^1.1.0",
+    "form-data": "^3.0.0",
+    "https": "^1.0.0",
+    "lodash": "^4.17.20",
+    "node-fetch": "^2.6.1",
+    "puppeteer": "^5.3.1",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "zombie": "^6.1.4"
+  }
+}
