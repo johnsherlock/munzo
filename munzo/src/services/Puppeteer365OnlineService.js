@@ -1,12 +1,16 @@
+const S3Client = require("aws-sdk/clients/s3");
 const boiUrl = "https://www.365online.com";
 
+const s3 = new S3Client({ region: 'eu-west-1' });
 const debug = false;
 const screenshotPath = undefined;
+const uploadToS3 = false;
 
-const enableDebug = (screenshotPath) => { 
+const enableDebug = (screenshotPath, uploadToS3) => { 
     console.log('Debug enabled');
     this.debug = true;
     this.screenshotPath = screenshotPath;
+    this.uploadToS3 = uploadToS3;
 }
 
 const login = async (page, id, num, dob, pin) => {
@@ -34,10 +38,12 @@ const downloadTransactions = async (page, path, from, to) => {
 
 const acceptCookies = async (page) => {
     try {
-        await page.waitForTimeout(2000);
+        // allow cookie banner to load - this blocks the entire page until accepted/rejected
+        await page.waitForTimeout(4000);
         await takeScreenshot(page, 'cookies');
         await page.click('#onetrust-accept-btn-handler');
         console.log('Cookies accepted');
+        // wait for cookie banner to disappear - scrolls away slowly
         await page.waitForTimeout(1000);
     }
     catch(error) {
@@ -65,8 +71,26 @@ const completeLoginStep2 = async (page, pin) => {
 
 const takeScreenshot = async (page, title) => {
     if(this.debug){
-        await page.screenshot({path: `${this.screenshotPath}/${title}.png`});
+        if(this.uploadToS3){
+            const buffer = await page.screenshot();
+            uploadScreenshotToS3(buffer, title);
+        }
+        else {
+            await page.screenshot({path: `${this.screenshotPath}/${title}.png`});
+        }
     }
+}
+
+const uploadScreenshotToS3 = async(buffer, title) => {
+    const result = await s3.upload({
+        Bucket: 'munzo',
+        Key: `debug/screenshots/${title}.png`,
+        Body: buffer,
+        ContentType: "image/png",
+        ACL: "bucket-owner-full-control"
+    })
+    .promise();
+    console.log(`Screenshot ${title} uploaded to ${result.Location}`);
 }
 
 const clickAndWait = async (selector, page) => {

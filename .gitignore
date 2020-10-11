@@ -1,3 +1,9 @@
 node_modules
 munzo/resources/creds.json
 .vscode/launch.json
+launch.json
+debug/cookies.png
+debug/login1.png
+debug/login2.png
+debug/statements.png
+export/TransactionExport.csv

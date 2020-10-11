@@ -1,13 +1,16 @@
 const chromeLambda = require("chrome-aws-lambda");
-const S3Client = require("aws-sdk/clients/s3");
+const AWS = require('aws-sdk');
 const puppeteerLoginService = require('../services/Puppeteer365OnlineService');
-let { id, num, dob, pin } = require("../../resources/creds.json"); 
-
-const s3 = new S3Client({ region: 'eu-west-1' });
+//let { id, num, dob, pin } = require("../../resources/creds.json"); 
 
 exports.handler = async function(event) {
 
     console.log(`Opening browser`);
+
+    const { id, num, dob, pin } = await retrieveCredentials();
+
+    console.log(`Num: ${num}`);
+
     const browser = await chromeLambda.puppeteer.launch({
         args: chromeLambda.args,
         executablePath: await chromeLambda.executablePath,
@@ -17,7 +20,7 @@ exports.handler = async function(event) {
     });
     const page = await browser.newPage();
     
-    puppeteerLoginService.enableDebug('./tmp')
+    puppeteerLoginService.enableDebug('/tmp', true)
     await puppeteerLoginService.login(page, id, num, dob, pin);
     await puppeteerLoginService.downloadLatestTransactions(page, '/tmp');
 
@@ -25,4 +28,13 @@ exports.handler = async function(event) {
     await browser.close();
 
     console.log('Done!');
+}
+
+const retrieveCredentials = async () => {
+    const ssm = new AWS.SSM({ region: process.env.AWS_DEFAULT_REGION });
+    const credentials = await ssm.getParameter({
+        Name: 'munzoCredentials',
+        WithDecryption: true
+    }).promise();
+    return JSON.parse(credentials.Parameter.Value);
 }

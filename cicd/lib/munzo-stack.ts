@@ -9,7 +9,9 @@ export class MunzoStack extends cdk.Stack {
 
     const lambdaPolicy = new iam.PolicyStatement({
       actions: [
-          's3:*'],
+          's3:*',
+          'ssm:GetParameter'
+      ],
       effect: iam.Effect.ALLOW,
       resources: ['*']
     })
@@ -32,7 +34,7 @@ export class MunzoStack extends cdk.Stack {
       role: munzoAPILambaRole,
       layers: [puppeteerLayer],
       memorySize: 2048,
-      timeout: cdk.Duration.seconds(30),
+      timeout: cdk.Duration.seconds(15),
       retryAttempts: 0
     });
   }
