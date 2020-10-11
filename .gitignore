@@ -1,2 +1,3 @@
 node_modules
 munzo/resources/creds.json
+.vscode/launch.json
