@@ -1,4 +1,4 @@
-# About
+# Munzo
 
 Simple project to automate downloading a transaction report from 365online in order to run some reports on daily activity. Very much a work in progress.
 
