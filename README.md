@@ -1,6 +1,6 @@
 # Munzo
 
-Simple project to automate downloading a transaction report from 365online in order to run some reports on daily activity. Very much a work in progress.
+Simple project to automate downloading a transaction report from 365online in order to run some reports on daily activity.
 
 Due to the lack of API from BOI, download of the transactions has to be performed by opening a headless browser (Puppeteer), logging into 365online, navigating to the transactions screen and exporting the latest transactions as CSV.
 
