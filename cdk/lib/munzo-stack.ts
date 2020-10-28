@@ -29,12 +29,12 @@ export class MunzoStack extends cdk.Stack {
 
     const downloadTransactionsHandler = new lambda.Function(this, 'DownloadTransactionsHandler', {
       runtime: lambda.Runtime.NODEJS_12_X,
-      code: lambda.Code.fromAsset('../munzo'),
+      code: lambda.Code.fromAsset('../app'),
       handler:  'src/lambda/TransactionDownloader.handler',
       role: munzoAPILambaRole,
       layers: [puppeteerLayer],
       memorySize: 2048,
-      timeout: cdk.Duration.seconds(15),
+      timeout: cdk.Duration.seconds(60),
       retryAttempts: 0
     });
   }

@@ -1,5 +1,5 @@
 node_modules
-munzo/resources/creds.json
+resources/creds.json
 .vscode/launch.json
 launch.json
 debug/cookies.png
